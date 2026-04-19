@@ -1,0 +1,49 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background: var(--pm-bg);
+  color: var(--pm-text);
+  font-family: var(--pm-font-sans);
+  line-height: 1.5;
+}
+
+a {
+  color: var(--pm-accent);
+}
+
+button,
+.button {
+  font: inherit;
+  cursor: pointer;
+  padding: 0.5rem 1rem;
+  border-radius: var(--pm-radius-sm);
+  border: 1px solid var(--pm-border);
+  background: var(--pm-surface);
+  color: var(--pm-text);
+}
+
+.button.primary {
+  background: var(--pm-accent);
+  color: var(--pm-accent-contrast);
+  border-color: var(--pm-accent);
+}
+
+code,
+pre {
+  font-family: var(--pm-font-mono);
+  font-size: 0.9em;
+}
+
+pre {
+  background: var(--pm-surface-2);
+  padding: 0.75rem;
+  border-radius: var(--pm-radius-sm);
+  overflow-x: auto;
+}

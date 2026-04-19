@@ -1,0 +1,102 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://market.pasmello.dev/spec/mello-package-v1.schema.json",
+  "title": "mello package envelope (v1)",
+  "description": "Contents of mello.package.json at the root of every published package zip.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "melloSpecVersion",
+    "type",
+    "scope",
+    "name",
+    "version",
+    "description",
+    "author",
+    "license"
+  ],
+  "properties": {
+    "melloSpecVersion": {
+      "const": "1",
+      "description": "Locked to '1' for this schema version. Bumping is a breaking change."
+    },
+    "type": {
+      "enum": ["tool", "theme", "workflow"],
+      "description": "Which Pasmello-native manifest is nested inside this package."
+    },
+    "scope": {
+      "type": "string",
+      "pattern": "^[a-z0-9](?:[a-z0-9]|-(?=[a-z0-9])){0,38}$",
+      "description": "GitHub login (lowercased). Globally unique ownership scope."
+    },
+    "name": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9._-]{0,63}$",
+      "description": "Package name within the scope. Lowercase, alphanumeric + dot/underscore/dash."
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(?:-((?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\\.(?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\\+([0-9a-zA-Z-]+(?:\\.[0-9a-zA-Z-]+)*))?$",
+      "description": "SemVer 2.0.0. Versions are immutable once published."
+    },
+    "description": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512
+    },
+    "author": {
+      "type": "object",
+      "required": ["github"],
+      "additionalProperties": false,
+      "properties": {
+        "github": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9](?:[A-Za-z0-9]|-(?=[A-Za-z0-9])){0,38}$",
+          "description": "GitHub login of the author. Must match `scope` (case-insensitive) for the MVP — co-owners are granted via /owners endpoint, not via this field."
+        },
+        "name": { "type": "string", "maxLength": 120 },
+        "url": { "type": "string", "format": "uri" }
+      }
+    },
+    "license": {
+      "type": "string",
+      "minLength": 1,
+      "description": "SPDX license identifier or expression, or 'UNLICENSED'."
+    },
+    "readme": {
+      "type": "string",
+      "description": "Path within the zip to a Markdown README. If omitted, the detail page falls back to `description`.",
+      "default": "README.md"
+    },
+    "homepage": { "type": "string", "format": "uri" },
+    "repository": { "type": "string", "format": "uri" },
+    "keywords": {
+      "type": "array",
+      "items": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]{0,31}$" },
+      "maxItems": 16
+    },
+    "pasmelloPluginSpecVersion": {
+      "type": "string",
+      "description": "Semver range pinning the expected Pasmello manifest schema version."
+    },
+    "dependencies": {
+      "type": "array",
+      "maxItems": 64,
+      "items": {
+        "type": "object",
+        "required": ["type", "name", "range"],
+        "additionalProperties": false,
+        "properties": {
+          "type": { "enum": ["tool", "theme", "workflow"] },
+          "name": {
+            "type": "string",
+            "pattern": "^@[a-z0-9](?:[a-z0-9]|-(?=[a-z0-9])){0,38}/[a-z0-9][a-z0-9._-]{0,63}$",
+            "description": "Fully qualified @scope/name."
+          },
+          "range": { "type": "string", "minLength": 1 }
+        }
+      },
+      "description": "Dependencies on other mello packages. Resolution is client-side (CLI or Pasmello host)."
+    }
+  }
+}

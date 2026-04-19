@@ -1,0 +1,46 @@
+                    GNU AFFERO GENERAL PUBLIC LICENSE
+                       Version 3, 19 November 2007
+
+ Copyright (C) 2026 mello contributors
+
+ Everyone is permitted to copy and distribute verbatim copies of this
+ license document, but changing it is not allowed.
+
+                            Preamble
+
+  The GNU Affero General Public License is a free, copyleft license for
+software and other kinds of works, specifically designed to ensure
+cooperation with the community in the case of network server software.
+
+  The full text of this license is available at
+<https://www.gnu.org/licenses/agpl-3.0.txt>.
+
+  This file is a placeholder that MUST be replaced with the complete
+verbatim text of AGPL-3.0 before the first public release of this
+repository. The AGPL requires distribution of the full license text
+alongside the program.
+
+                 How to Apply These Terms to Your Programs
+
+  To apply the Affero General Public License to your program, attach
+the following notices to the program. It is safest to attach them to
+the start of each source file to most effectively state the exclusion
+of warranty; and each file should have at least the "copyright" line
+and a pointer to where the full notice is found.
+
+    mello — independent plugin marketplace for Pasmello
+    Copyright (C) 2026 mello contributors
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as
+    published by the Free Software Foundation, either version 3 of the
+    License, or (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public
+    License along with this program.  If not, see
+    <https://www.gnu.org/licenses/>.
