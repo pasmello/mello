@@ -41,7 +41,7 @@ See [`LICENSING.md`](./LICENSING.md) for the full strategy.
 ```bash
 # Prereqs: Node ≥ 24, pnpm ≥ 10, Docker (for local Postgres + MinIO)
 make install
-make dev             # api on :8787, web on :5173, postgres + minio via compose
+make dev             # api on :8787, web on :5180, postgres + minio via compose
 make migrate         # run DB migrations
 ```
 

@@ -4,7 +4,9 @@
     "outDir": "dist",
     "rootDir": "src",
     "types": ["node"],
-    "lib": ["ES2023"]
+    "lib": ["ES2023"],
+    "allowImportingTsExtensions": true,
+    "rewriteRelativeImportExtensions": true
   },
   "include": ["src/**/*"]
 }
