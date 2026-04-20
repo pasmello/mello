@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://market.pasmello.dev/spec/pasmello-manifests/theme.schema.json",
+  "$id": "https://market.pasmello.com/spec/pasmello-manifests/theme.schema.json",
   "title": "Pasmello ThemeManifest (vendored)",
   "description": "Mirror of pasmello/packages/shared/src/theme.ts. Pin and re-sync per Pasmello release.",
   "type": "object",

@@ -26,7 +26,7 @@ export function packageKey(params: {
   return `packages/${type}/${scope}/${name}/${version}/${sha256}.zip`;
 }
 
-// Public CDN URL. The bucket is fronted by cdn.pasmello.dev in prod.
+// Public CDN URL. The bucket is fronted by cdn.pasmello.com in prod.
 export function publicDownloadUrl(r2Key: string): string {
   return `${env.CDN_BASE_URL.replace(/\/$/, '')}/${r2Key}`;
 }

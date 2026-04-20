@@ -223,7 +223,7 @@ packagesRoutes.get('/:type/:scope/:name/:version/verify-access', async (c) => {
 });
 
 // ---- GET /v1/packages/:type/:scope/:name/:version/download --------------
-// Not in the plan's API table, but convenient. 302s to cdn.pasmello.dev.
+// Not in the plan's API table, but convenient. 302s to cdn.pasmello.com.
 packagesRoutes.get('/:type/:scope/:name/:version/download', async (c) => {
   const params = parseParams(c.req.param(), { requireVersion: true });
   if (!params.ok) return c.json({ error: params.error }, 400);

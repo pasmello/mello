@@ -34,5 +34,5 @@ the state bucket manually the first time — see `docs/bootstrap.md` (todo).
 
 ## Out of scope
 
-- DNS for `pasmello.dev` itself (owned by the `pasmello-saas` repo)
+- DNS for `pasmello.com` itself (owned by the `pasmello-saas` repo)
 - Neon / Sentry / UptimeRobot configuration (managed via their own UIs)

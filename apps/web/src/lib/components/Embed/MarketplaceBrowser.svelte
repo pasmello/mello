@@ -1,7 +1,7 @@
 <script lang="ts">
-  // Embed entry point. pasmello-saas mounts this inside pasmello.dev so the
+  // Embed entry point. pasmello-saas mounts this inside pasmello.com so the
   // SaaS frontend reuses the same browser UI without any backend coupling —
-  // calls go client-side to market.pasmello.dev. Independence is preserved:
+  // calls go client-side to registry.pasmello.com. Independence is preserved:
   // if this component is rendered against a self-built pasmello, the same
   // component works without modification.
 

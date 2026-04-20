@@ -1,0 +1,15 @@
+# Copy to env/prod.tfvars and fill in. Do NOT commit env/prod.tfvars.
+# The .gitignore excludes env/*.tfvars; only the .example file is tracked.
+
+cloudflare_account_id = "<your-cloudflare-account-id>"
+fly_org               = "pasmello"
+
+# Everything else has sensible defaults — override only if needed:
+# zone_name              = "pasmello.com"
+# r2_bucket_name         = "mello-packages-prod"
+# pages_project_name     = "market-pasmello-com"
+# get_pages_project_name = "get-pasmello-com"
+# fly_app_name           = "mello-api"
+# fly_region             = "nrt"
+# fly_spending_cap_usd   = 25
+# analytics_dataset      = "mello_downloads"

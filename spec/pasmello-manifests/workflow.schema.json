@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://market.pasmello.dev/spec/pasmello-manifests/workflow.schema.json",
+  "$id": "https://market.pasmello.com/spec/pasmello-manifests/workflow.schema.json",
   "title": "Pasmello WorkflowManifest (vendored)",
   "description": "Mirror of pasmello/packages/shared/src/workflow.ts. Pin and re-sync per Pasmello release.",
   "type": "object",
