@@ -3,7 +3,7 @@ import { TOKEN_PREFIX, hashToken, newApiToken } from '../auth/tokens.ts';
 
 describe('auth/tokens', () => {
   it('newApiToken returns a prefixed raw token and matching hash', () => {
-    const { raw, hash, prefix } = newApiToken();
+    const { raw, hash } = newApiToken();
     expect(raw.startsWith(TOKEN_PREFIX)).toBe(true);
     expect(hash).toBe(hashToken(raw));
     expect(hash).toHaveLength(64);
