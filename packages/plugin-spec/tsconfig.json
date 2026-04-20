@@ -4,7 +4,9 @@
     "rootDir": "../..",
     "outDir": "dist",
     "declaration": true,
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "allowImportingTsExtensions": true,
+    "noEmit": true
   },
   "include": ["src/**/*", "../../spec/**/*.schema.json"]
 }
