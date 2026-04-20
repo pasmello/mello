@@ -1,0 +1,33 @@
+name: analytics-cron
+
+on:
+  schedule:
+    # 03:15 UTC daily — aggregates yesterday's downloads.
+    - cron: '15 3 * * *'
+  workflow_dispatch:
+    inputs:
+      date:
+        description: 'YYYY-MM-DD (default: yesterday UTC)'
+        required: false
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Run analytics batch
+        working-directory: infra/scripts
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CF_ANALYTICS_READ_TOKEN }}
+          CF_ANALYTICS_DATASET: mello_downloads
+        run: pnpm dlx tsx analytics-batch.ts ${{ inputs.date }}
