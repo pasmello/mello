@@ -1,0 +1,23 @@
+{
+  "name": "@mello/plugin-spec",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Package envelope schema + vendored Pasmello manifest schemas. Source of truth for mello publish validation.",
+  "license": "Apache-2.0",
+  "main": "src/index.ts",
+  "types": "src/index.ts",
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "ajv": "^8.18.0",
+    "ajv-formats": "^3.0.1",
+    "jszip": "^3.10.1"
+  },
+  "devDependencies": {
+    "typescript": "^6.0.3",
+    "vitest": "^4.1.4"
+  }
+}
