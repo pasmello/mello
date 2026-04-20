@@ -21,7 +21,10 @@ pub struct Envelope {
     pub repository: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub keywords: Option<Vec<String>>,
-    #[serde(rename = "pasmelloPluginSpecVersion", skip_serializing_if = "Option::is_none")]
+    #[serde(
+        rename = "pasmelloPluginSpecVersion",
+        skip_serializing_if = "Option::is_none"
+    )]
     pub pasmello_plugin_spec_version: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub dependencies: Option<Vec<Dependency>>,
@@ -45,10 +48,9 @@ pub struct Dependency {
 
 pub fn read_envelope(dir: &Path) -> Result<Envelope> {
     let path = dir.join("mello.package.json");
-    let text = std::fs::read_to_string(&path)
-        .with_context(|| format!("read {}", path.display()))?;
-    let env: Envelope = serde_json::from_str(&text)
-        .with_context(|| format!("parse {}", path.display()))?;
+    let text = std::fs::read_to_string(&path).with_context(|| format!("read {}", path.display()))?;
+    let env: Envelope =
+        serde_json::from_str(&text).with_context(|| format!("parse {}", path.display()))?;
     Ok(env)
 }
 
@@ -57,9 +59,8 @@ pub fn read_envelope(dir: &Path) -> Result<Envelope> {
 pub fn read_manifest(dir: &Path, r#type: &str) -> Result<serde_json::Value> {
     let filename = format!("{type}.manifest.json");
     let path = dir.join(&filename);
-    let text = std::fs::read_to_string(&path)
-        .with_context(|| format!("read {}", path.display()))?;
-    let value: serde_json::Value = serde_json::from_str(&text)
-        .with_context(|| format!("parse {}", path.display()))?;
+    let text = std::fs::read_to_string(&path).with_context(|| format!("read {}", path.display()))?;
+    let value: serde_json::Value =
+        serde_json::from_str(&text).with_context(|| format!("parse {}", path.display()))?;
     Ok(value)
 }

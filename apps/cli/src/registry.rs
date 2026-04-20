@@ -70,10 +70,7 @@ impl Registry {
         })
     }
 
-    fn auth(
-        &self,
-        req: reqwest::blocking::RequestBuilder,
-    ) -> reqwest::blocking::RequestBuilder {
+    fn auth(&self, req: reqwest::blocking::RequestBuilder) -> reqwest::blocking::RequestBuilder {
         match &self.token {
             Some(t) => req.bearer_auth(t),
             None => req,
@@ -84,9 +81,7 @@ impl Registry {
         format!("{}{}", self.base_url, path)
     }
 
-    fn ok<T: for<'de> Deserialize<'de>>(
-        res: reqwest::blocking::Response,
-    ) -> Result<T> {
+    fn ok<T: for<'de> Deserialize<'de>>(res: reqwest::blocking::Response) -> Result<T> {
         let status = res.status();
         if status.is_success() {
             return Ok(res.json::<T>()?);
@@ -181,12 +176,7 @@ impl Registry {
         self.expect_ok(res)
     }
 
-    pub fn list_owners(
-        &self,
-        r#type: &str,
-        scope: &str,
-        name: &str,
-    ) -> Result<Vec<OwnerEntry>> {
+    pub fn list_owners(&self, r#type: &str, scope: &str, name: &str) -> Result<Vec<OwnerEntry>> {
         #[derive(Deserialize)]
         struct Envelope {
             owners: Vec<OwnerEntry>,
@@ -197,13 +187,7 @@ impl Registry {
         Ok(env.owners)
     }
 
-    pub fn add_owner(
-        &self,
-        r#type: &str,
-        scope: &str,
-        name: &str,
-        login: &str,
-    ) -> Result<()> {
+    pub fn add_owner(&self, r#type: &str, scope: &str, name: &str, login: &str) -> Result<()> {
         #[derive(Serialize)]
         struct Body<'a> {
             login: &'a str,
@@ -216,13 +200,7 @@ impl Registry {
         self.expect_ok(res)
     }
 
-    pub fn remove_owner(
-        &self,
-        r#type: &str,
-        scope: &str,
-        name: &str,
-        login: &str,
-    ) -> Result<()> {
+    pub fn remove_owner(&self, r#type: &str, scope: &str, name: &str, login: &str) -> Result<()> {
         let path = format!("/v1/packages/{type}/{scope}/{name}/owners/{login}");
         let res = self.auth(self.client.delete(self.url(&path))).send()?;
         self.expect_ok(res)

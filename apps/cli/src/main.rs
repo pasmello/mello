@@ -108,15 +108,15 @@ fn main() -> Result<()> {
         Command::Init { r#type, name } => commands::init::run(&cfg, &r#type, name.as_deref()),
         Command::Validate { path } => commands::validate::run(&cfg, &path),
         Command::Publish { yes, path } => commands::publish::run(&cfg, &path, yes),
-        Command::Yank { coord, version, reason } => {
-            commands::yank::run(&cfg, &coord, &version, reason.as_deref())
-        }
+        Command::Yank {
+            coord,
+            version,
+            reason,
+        } => commands::yank::run(&cfg, &coord, &version, reason.as_deref()),
         Command::Owners { action } => match action {
             OwnersAction::List { coord } => commands::owners::list(&cfg, &coord),
             OwnersAction::Add { coord, login } => commands::owners::add(&cfg, &coord, &login),
-            OwnersAction::Remove { coord, login } => {
-                commands::owners::remove(&cfg, &coord, &login)
-            }
+            OwnersAction::Remove { coord, login } => commands::owners::remove(&cfg, &coord, &login),
         },
     }
 }

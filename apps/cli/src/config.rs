@@ -28,7 +28,10 @@ impl Config {
             .or(file.registry)
             .unwrap_or_else(|| DEFAULT_REGISTRY.to_string());
 
-        Ok(Config { registry, config_path })
+        Ok(Config {
+            registry,
+            config_path,
+        })
     }
 }
 
@@ -44,9 +47,8 @@ fn read_file(path: &Path) -> Result<FileShape> {
     if !path.exists() {
         return Ok(FileShape::default());
     }
-    let text = std::fs::read_to_string(path)
-        .with_context(|| format!("read {}", path.display()))?;
-    let parsed: FileShape = toml::from_str(&text)
-        .with_context(|| format!("parse {}", path.display()))?;
+    let text = std::fs::read_to_string(path).with_context(|| format!("read {}", path.display()))?;
+    let parsed: FileShape =
+        toml::from_str(&text).with_context(|| format!("parse {}", path.display()))?;
     Ok(parsed)
 }

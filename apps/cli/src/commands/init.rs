@@ -25,7 +25,11 @@ pub fn run(_cfg: &Config, r#type: &str, name: Option<&str>) -> Result<()> {
         name: pkg_name.clone(),
         version: "0.1.0".into(),
         description,
-        author: Author { github: scope.clone(), name: None, url: None },
+        author: Author {
+            github: scope.clone(),
+            name: None,
+            url: None,
+        },
         license,
         readme: Some("README.md".into()),
         homepage: None,
@@ -41,7 +45,10 @@ pub fn run(_cfg: &Config, r#type: &str, name: Option<&str>) -> Result<()> {
     write_starter_readme(&pkg_name)?;
 
     println!("Initialized {} package: @{}/{}", r#type, scope, pkg_name);
-    println!("Next: fill in {}.manifest.json and run `mello publish`.", r#type);
+    println!(
+        "Next: fill in {}.manifest.json and run `mello publish`.",
+        r#type
+    );
     Ok(())
 }
 
