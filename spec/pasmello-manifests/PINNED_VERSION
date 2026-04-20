@@ -1,8 +1,11 @@
 source: pasmello/packages/shared/src/{tool,theme,workflow}.ts
 pinned_ref: unpinned (MVP — pre-publish of @pasmello/plugin-spec)
-last_synced_from: /home/bartolv/Projects/Pasmello (local working tree, 2026-04-19)
+last_synced_from: /home/bartolv/Projects/Pasmello (local working tree, 2026-04-21)
 notes:
   - Re-sync these schemas when @pasmello/plugin-spec is npm-published with a
     tagged release. Record the exact tag here.
   - If upstream adds a new package type (e.g. "skill"), add the matching schema
     here AND bump mello-package-v1.schema.json `type` enum.
+  - 2026-04-21 drift check: added `settings` field to tool.schema.json to
+    match Pasmello's ToolManifest (tool.ts:14). Theme + workflow schemas
+    unchanged (still in sync).
