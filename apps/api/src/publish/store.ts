@@ -3,6 +3,7 @@ import { PutObjectCommand } from '@aws-sdk/client-s3';
 import { env } from '../env.ts';
 import { sql } from '../db/client.ts';
 import { packageKey, s3 } from '../r2/client.ts';
+import { compareSemver } from '../util/semver.ts';
 import { PublishRejectError } from './extract.ts';
 import type { ValidatedEnvelope } from './validate.ts';
 
@@ -167,16 +168,21 @@ export async function storePackageVersion(input: StoreInput): Promise<StoredVers
       }
     }
 
-    // Promote latest_version if this version sorts highest. For MVP we just
-    // bump when the new version string is lexicographically greater than the
-    // current one — semver-correct comparison can replace this later.
-    await tx`
-      UPDATE packages
-        SET latest_version = ${envelope.version},
-            updated_at = now()
-        WHERE id = ${packageId}
-          AND (latest_version IS NULL OR ${envelope.version} > latest_version)
+    // Promote latest_version when this version outranks the current tip by
+    // semver. We read+compare in JS because Postgres's string ordering isn't
+    // semver-aware (10.0.0 sorts below 2.0.0 otherwise).
+    const currentRows = await tx<Array<{ latestVersion: string | null }>>`
+      SELECT latest_version FROM packages WHERE id = ${packageId}
     `;
+    const current = currentRows[0]?.latestVersion ?? null;
+    if (!current || compareSemver(envelope.version, current) > 0) {
+      await tx`
+        UPDATE packages
+          SET latest_version = ${envelope.version},
+              updated_at = now()
+          WHERE id = ${packageId}
+      `;
+    }
 
     return { packageId, versionId };
   });

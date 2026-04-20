@@ -29,8 +29,9 @@ Credentials come from env:
 
 ## State
 
-For MVP, state lives in a Cloudflare R2 bucket via the HTTP backend. Bootstrap
-the state bucket manually the first time — see `docs/bootstrap.md` (todo).
+State lives in a Cloudflare R2 bucket via the S3-compatible backend. See
+[`../../docs/bootstrap.md`](../../docs/bootstrap.md) for first-time setup
+(bucket creation + `backend.hcl`).
 
 ## Out of scope
 

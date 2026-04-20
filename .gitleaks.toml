@@ -1,0 +1,37 @@
+# gitleaks config — run in CI and optionally as a pre-commit hook.
+# The default gitleaks ruleset catches AWS/GCP/GitHub/Slack/etc.; we extend
+# it with mello-specific secrets.
+
+[extend]
+useDefault = true
+
+[[rules]]
+id = "mello-api-token"
+description = "mello API token (`mello_tok_` + base64url)"
+regex = '''mello_tok_[A-Za-z0-9_\-]{16,}'''
+keywords = ["mello_tok_"]
+
+[[rules]]
+id = "mello-session"
+description = "mello session cookie value"
+regex = '''mello_session=[A-Za-z0-9_\-]{32,}'''
+keywords = ["mello_session"]
+
+[[rules]]
+id = "github-oauth-secret"
+description = "GitHub OAuth app client secret (sha1-ish hex / ghs_)"
+regex = '''(gh[osu]_[A-Za-z0-9]{20,})|(github_pat_[A-Za-z0-9_]{80,})'''
+keywords = ["ghs_", "gho_", "ghu_", "github_pat_"]
+
+# Allow-list: fixtures + snapshots intentionally contain look-alikes.
+[allowlist]
+description = "intentional look-alikes in fixtures and test vectors"
+paths = [
+  '''apps/api/src/tests/.*\.test\.ts''',
+  '''apps/cli/tests/.*\.rs''',
+]
+regexes = [
+  '''mello_tok_placeholder''',
+  '''mello_tok_<''',
+  '''mello_session=<''',
+]

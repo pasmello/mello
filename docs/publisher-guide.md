@@ -119,11 +119,10 @@ search, and `mello` clients refuse to resolve them for new installs.
 Add a co-owner so they can publish under the same scope:
 
 ```
-# Only the primary owner can run this — pending dashboard UI; use CLI alias:
-curl -XPOST -H "Authorization: Bearer $MELLO_TOKEN" \
-  -H "Content-Type: application/json" \
-  -d '{"login":"bob"}' \
-  https://registry.pasmello.com/v1/packages/tool/alice/clock/owners
+mello owners add    tool:@alice/clock bob
+mello owners list   tool:@alice/clock
+mello owners remove tool:@alice/clock bob
 ```
 
-A future CLI subcommand (`mello owners add bob`) will wrap this.
+Only the primary owner can add/remove co-owners. Co-owners can publish
+and yank but can't change the owner list.

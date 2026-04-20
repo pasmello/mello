@@ -178,6 +178,57 @@ impl Registry {
             .auth(self.client.post(self.url(&path)))
             .json(&Body { reason })
             .send()?;
+        self.expect_ok(res)
+    }
+
+    pub fn list_owners(
+        &self,
+        r#type: &str,
+        scope: &str,
+        name: &str,
+    ) -> Result<Vec<OwnerEntry>> {
+        #[derive(Deserialize)]
+        struct Envelope {
+            owners: Vec<OwnerEntry>,
+        }
+        let path = format!("/v1/packages/{type}/{scope}/{name}/owners");
+        let res = self.auth(self.client.get(self.url(&path))).send()?;
+        let env = Self::ok::<Envelope>(res)?;
+        Ok(env.owners)
+    }
+
+    pub fn add_owner(
+        &self,
+        r#type: &str,
+        scope: &str,
+        name: &str,
+        login: &str,
+    ) -> Result<()> {
+        #[derive(Serialize)]
+        struct Body<'a> {
+            login: &'a str,
+        }
+        let path = format!("/v1/packages/{type}/{scope}/{name}/owners");
+        let res = self
+            .auth(self.client.post(self.url(&path)))
+            .json(&Body { login })
+            .send()?;
+        self.expect_ok(res)
+    }
+
+    pub fn remove_owner(
+        &self,
+        r#type: &str,
+        scope: &str,
+        name: &str,
+        login: &str,
+    ) -> Result<()> {
+        let path = format!("/v1/packages/{type}/{scope}/{name}/owners/{login}");
+        let res = self.auth(self.client.delete(self.url(&path))).send()?;
+        self.expect_ok(res)
+    }
+
+    fn expect_ok(&self, res: reqwest::blocking::Response) -> Result<()> {
         let status = res.status();
         if status.is_success() {
             return Ok(());
@@ -193,4 +244,12 @@ impl Registry {
         }
         .into())
     }
+}
+
+#[derive(Debug, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct OwnerEntry {
+    pub login: Option<String>,
+    pub role: String,
+    pub added_at: Option<String>,
 }

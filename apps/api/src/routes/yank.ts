@@ -3,6 +3,7 @@ import { z } from 'zod';
 import { sql } from '../db/client.ts';
 import { requireAuth, type AuthedUser } from '../auth/tokens.ts';
 import { requireFlag } from '../middleware/flags.ts';
+import { maxSemver } from '../util/semver.ts';
 
 export const yankRoutes = new Hono<{ Variables: { user: AuthedUser } }>();
 
@@ -74,16 +75,13 @@ yankRoutes.post('/:type/:scope/:name/yank/:version', async (c) => {
     `;
     if (updated.length === 0) return { versionFound: false };
 
-    // Recompute latest_version to newest 'active' version. Lexicographic
-    // ordering here; a proper semver comparator lands with Phase 9 or when
-    // tsvector search needs it.
-    const latest = await tx<Array<{ version: string }>>`
+    // Recompute latest_version semver-correctly in JS — SQL string ordering
+    // would put 0.10.0 below 0.2.0.
+    const active = await tx<Array<{ version: string }>>`
       SELECT version FROM versions
       WHERE package_id = ${pkg.packageId} AND status = 'active'
-      ORDER BY version DESC
-      LIMIT 1
     `;
-    const newLatest = latest[0]?.version ?? null;
+    const newLatest = maxSemver(active.map((r) => r.version));
     await tx`
       UPDATE packages SET latest_version = ${newLatest}, updated_at = now()
       WHERE id = ${pkg.packageId}
@@ -124,13 +122,11 @@ yankRoutes.post('/:type/:scope/:name/unyank/:version', async (c) => {
   `;
   if (updated.length === 0) return c.json({ error: 'version not yanked' }, 404);
 
-  const latest = await sql<Array<{ version: string }>>`
+  const active = await sql<Array<{ version: string }>>`
     SELECT version FROM versions
     WHERE package_id = ${pkg.packageId} AND status = 'active'
-    ORDER BY version DESC
-    LIMIT 1
   `;
-  const newLatest = latest[0]?.version ?? null;
+  const newLatest = maxSemver(active.map((r) => r.version));
   await sql`
     UPDATE packages SET latest_version = ${newLatest}, updated_at = now()
     WHERE id = ${pkg.packageId}
