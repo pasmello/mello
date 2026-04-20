@@ -16,6 +16,12 @@ const schema = z.object({
   CDN_BASE_URL: z.url(),
   GITHUB_CLIENT_ID: z.string().optional(),
   GITHUB_CLIENT_SECRET: z.string().optional(),
+  GITHUB_OAUTH_CALLBACK_URL: z.url().optional(),
+  WEB_ORIGIN: z.url().default('http://localhost:5180'),
+  SESSION_COOKIE_SECURE: z
+    .string()
+    .optional()
+    .transform((v) => v !== 'false'),
   PASMELLO_SAAS_VERIFY_URL: z.url().optional(),
   ADMIN_LOGINS: z
     .string()
