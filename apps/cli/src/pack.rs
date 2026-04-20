@@ -105,4 +105,3 @@ pub fn sha256_hex(bytes: &[u8]) -> String {
     h.update(bytes);
     hex::encode(h.finalize())
 }
-
