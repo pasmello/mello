@@ -40,14 +40,10 @@ pub struct MeResponse {
 #[derive(Debug, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct PublishResponse {
-    pub package_id: String,
-    pub version_id: String,
     pub r#type: String,
     pub scope: String,
     pub name: String,
     pub version: String,
-    pub sha256: String,
-    pub size_bytes: u64,
     pub download_url: String,
 }
 

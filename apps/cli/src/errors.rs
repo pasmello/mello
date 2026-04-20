@@ -11,7 +11,4 @@ pub enum MelloError {
         code: String,
         detail: String,
     },
-
-    #[error("invalid package: {0}")]
-    InvalidPackage(String),
 }

@@ -13,7 +13,6 @@ struct FileShape {
 #[derive(Debug, Clone)]
 pub struct Config {
     pub registry: String,
-    pub config_path: PathBuf,
 }
 
 impl Config {
@@ -28,10 +27,7 @@ impl Config {
             .or(file.registry)
             .unwrap_or_else(|| DEFAULT_REGISTRY.to_string());
 
-        Ok(Config {
-            registry,
-            config_path,
-        })
+        Ok(Config { registry })
     }
 }
 
