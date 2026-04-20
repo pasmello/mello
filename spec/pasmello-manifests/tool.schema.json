@@ -54,6 +54,35 @@
           }
         }
       }
+    },
+    "settings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["key", "type", "label", "default"],
+        "additionalProperties": false,
+        "properties": {
+          "key": { "type": "string" },
+          "type": { "enum": ["color", "select", "toggle", "range", "text"] },
+          "label": { "type": "string" },
+          "description": { "type": "string" },
+          "default": {},
+          "options": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["value", "label"],
+              "additionalProperties": false,
+              "properties": {
+                "value": { "type": "string" },
+                "label": { "type": "string" }
+              }
+            }
+          },
+          "min": { "type": "number" },
+          "max": { "type": "number" }
+        }
+      }
     }
   }
 }

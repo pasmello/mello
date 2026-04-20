@@ -223,11 +223,8 @@ packagesRoutes.get('/:type/:scope/:name/:version/verify-access', async (c) => {
 });
 
 // ---- GET /v1/packages/:type/:scope/:name/:version/download --------------
-// Not in the plan's API table, but convenient. Same effect as /v1/download
-// (which lives in the same file for symmetry).
-packagesRoutes.get('/:type/:scope/:name/:version/download', downloadHandler);
-
-export async function downloadHandler(c: Parameters<Parameters<typeof packagesRoutes.get>[1]>[0]) {
+// Not in the plan's API table, but convenient. 302s to cdn.pasmello.dev.
+packagesRoutes.get('/:type/:scope/:name/:version/download', async (c) => {
   const params = parseParams(c.req.param(), { requireVersion: true });
   if (!params.ok) return c.json({ error: params.error }, 400);
   const { type, scope, name, version } = params.value as Required<typeof params.value>;
@@ -247,7 +244,7 @@ export async function downloadHandler(c: Parameters<Parameters<typeof packagesRo
     return c.json({ error: 'gone' }, 410);
   }
   return c.redirect(publicDownloadUrl(r.r2Key), 302);
-}
+});
 
 // ---- helpers ------------------------------------------------------------
 function parseParams(
