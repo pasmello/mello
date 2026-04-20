@@ -1,61 +1,80 @@
 # Licensing
 
-mello uses a dual-license model.
+mello is licensed **per subtree** — different pieces of the repo carry
+different licenses so each can be adopted on the terms that make sense for
+that piece. The subtree tree is the canonical source; when in doubt, check
+the `LICENSE` file in the nearest containing directory.
 
-## Core service — AGPL v3
+## Per-subtree summary
+
+| Subtree | License |
+|---|---|
+| `apps/api/`, `apps/web/`, `packages/admin-core/`, `infra/` | **AGPL v3** (`LICENSE`) with commercial dual-license option |
+| `apps/cli/` | **Apache 2.0** (`apps/cli/LICENSE`, full text at `LICENSE-APACHE`) |
+| `packages/plugin-spec/` | **Apache 2.0** (`packages/plugin-spec/LICENSE`) |
+| `packages/registry-client/` | **Apache 2.0** (`packages/registry-client/LICENSE`) |
+| `spec/` | **Apache 2.0** (`spec/LICENSE`) |
+
+## AGPL v3 — server + admin + infra
 
 The registry API, marketplace web UI, admin/moderation tooling, and
-infrastructure configuration are licensed under the
+infrastructure-as-code are licensed under the
 [GNU Affero General Public License v3.0](./LICENSE).
 
-This covers:
-- `apps/api/` — registry API server
-- `apps/web/` — marketplace web UI
-- `packages/admin-core/` — moderation primitives
-- `infra/` — infrastructure as code
+**Why AGPL:** public-good registries (PyPI / Warehouse, crates.io,
+RubyGems.org) are conventionally open source. AGPL prevents a commercial
+competitor from running a proprietary fork as a service while keeping the
+code genuinely open.
 
-**Why AGPL:** registries are conventionally open source
-([PyPI/Warehouse](https://github.com/pypi/warehouse),
-[crates.io](https://github.com/rust-lang/crates.io),
-[RubyGems.org](https://github.com/rubygems/rubygems.org)). AGPL prevents a
-commercial competitor from running a proprietary fork as a service while
-keeping the code genuinely open.
+### Commercial dual-license option
 
-## Package envelope spec — Apache 2.0
+Organizations that need to operate a private / proprietary derivative of
+the server components (for example, an enterprise self-hosted deployment
+that cannot comply with the AGPL's source-distribution requirements) can
+acquire a commercial license from the maintainers. Contact
+**admin@pasmello.com**.
 
-The package format specification (`spec/`) is licensed under the
-[Apache License 2.0](./LICENSE-APACHE).
+## Apache 2.0 — CLI + TS packages + schemas
 
-This covers:
-- `spec/mello-package-v1.schema.json` — envelope schema
-- `spec/pasmello-manifests/` — vendored JSON Schemas for Pasmello manifests
+The Rust CLI, TypeScript client packages, and package envelope schemas are
+licensed under the [Apache License 2.0](./LICENSE-APACHE). Anyone can
+install, vendor, modify, and redistribute these pieces without a copyleft
+obligation — the goal is to keep plugin authoring and tooling friction-free.
 
-Plugin authors, tooling authors, and alternative clients must be free to
-validate and produce valid mello packages without any copyleft burden.
+## FAQ
 
-## Commercial dual-license option
+### Can I publish a plugin to mello without inheriting AGPL?
 
-For organizations that need to operate a private / proprietary derivative
-of the registry (for example, an enterprise self-hosted deployment that
-cannot comply with the AGPL's source-distribution requirements), a
-commercial license is available. Contact the maintainers.
+**Yes.** Your plugin runs in a separate process (Pasmello's sandboxed
+iframe). Publishing a package doesn't make your package a derivative
+work of the registry, and our CLI / SDK / envelope schema are Apache 2.0
+so your tooling can depend on them freely.
 
-## What this means
+### Can I run my own copy of the registry?
 
-| You want to... | Under AGPL | Under commercial license |
-|---|---|---|
-| Run the registry as-is for a public marketplace | ✅ (attribute + keep source open) | N/A |
-| Self-host for your organization, unmodified | ✅ (no AGPL trigger if no external users) | N/A |
-| Modify and offer as a hosted service | ✅ (must release modifications) | ✅ (no source-release obligation) |
-| Ship a proprietary fork | ❌ | ✅ |
-| Build a Pasmello plugin and publish to a mello registry | ✅ (plugin is not a derivative — runs in a separate sandbox) | N/A |
+**Yes** — under AGPL, for any purpose, including hosting it for your team
+or the public. You must pass the AGPL's source-availability obligation on
+to your users if you modify the server and expose it over a network.
 
-## Contributing
+### Can I fork the registry and sell it as a hosted service?
 
-Contributions to AGPL-licensed directories are under AGPL v3. Contributions
-to `spec/` are under Apache 2.0. The license of the directory you're
-contributing to determines which applies.
+**Only under the AGPL**, which requires you to release your modifications.
+If your business model can't accommodate that, contact us about a
+commercial license.
 
-Sibling repos:
-- `pasmello` (MIT) — the Pasmello app itself, plugin spec, CLI, SDK
-- `pasmello-saas` (private, commercial) — hosted SaaS backend
+### Can I copy code between subtrees?
+
+**Respect the direction:** pulling Apache-licensed code *into* an AGPL
+subtree is fine. Pulling AGPL code *into* an Apache subtree is not — it
+would effectively relicense the AGPL portion, which we can't do. If you
+find yourself wanting to do this, open an issue first.
+
+### Where do I sign the CLA?
+
+There is no CLA. Your contribution is licensed under the license of the
+subtree you're modifying (see `CONTRIBUTING.md`).
+
+## Sibling repos
+
+- `pasmello` (MIT) — the Pasmello app itself, plugin spec, plugin-author ergonomics
+- `pasmello-saas` (private, commercial) — hosted SaaS backend; a client of mello

@@ -1,0 +1,14 @@
+mello
+Copyright 2026 the mello authors.
+
+This product includes software developed by the mello authors
+(https://github.com/pasmello/mello).
+
+Per-subtree licensing:
+- apps/api/, apps/web/, packages/admin-core/, infra/
+    → GNU Affero General Public License, Version 3 (see LICENSE)
+- apps/cli/, packages/plugin-spec/, packages/registry-client/, spec/
+    → Apache License, Version 2.0 (see LICENSE-APACHE)
+
+For commercial self-hosted licensing of the AGPL-covered components,
+contact admin@pasmello.com. See LICENSING.md for the full strategy.

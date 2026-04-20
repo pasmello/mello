@@ -8,33 +8,36 @@ package registry with a web UI and a CLI package manager.
 
 ## What this repo is
 
-This is the mello service — the open-source, AGPL-licensed infrastructure
-that powers the Pasmello plugin ecosystem. It is **independent public
-infrastructure**: the hosted pasmello SaaS, a self-built local pasmello,
-and the CLI are all equal clients of this API.
+This is the mello service — the open-source infrastructure that powers the
+Pasmello plugin ecosystem. It is **independent public infrastructure**: the
+hosted pasmello SaaS, a self-built local pasmello, and the CLI are all equal
+clients of this API.
 
-- Registry API (Hono on Fly.io)
-- Marketplace web UI (SvelteKit static on Cloudflare Pages)
-- Admin / moderation tools
-- Infrastructure as code (Terraform + Neon migrations)
+- Registry API (Hono on Fly.io) — AGPL v3
+- Marketplace web UI (SvelteKit static on Cloudflare Pages) — AGPL v3
+- Admin / moderation tools — AGPL v3
+- Rust CLI (`apps/cli/`) — Apache 2.0
+- TS client packages (`packages/plugin-spec`, `packages/registry-client`) — Apache 2.0
+- Package envelope + vendored Pasmello schemas (`spec/`) — Apache 2.0
+- Infrastructure as code (Terraform, CF Worker, Neon migrations)
 
 ## What this repo is **not**
 
 | Concern | Lives in |
 |---|---|
-| `mello` CLI (Rust) | `pasmello` repo (MIT) |
-| `@pasmello/plugin-spec` | `pasmello` repo (MIT) |
-| `@pasmello/registry-client` SDK | `pasmello` repo (MIT) |
+| Pasmello web app | `pasmello` repo (MIT) |
+| `@pasmello/plugin-spec` (Pasmello's plugin author ergonomics) | `pasmello` repo (MIT) |
 | Hosted SaaS (sessions, LLM proxy, billing) | `pasmello-saas` repo (private, commercial) |
 
 See [`LICENSING.md`](./LICENSING.md) for the full strategy.
 
 ## Deployment layout
 
-- `market.pasmello.dev` → this repo's API + web UI
-- `cdn.pasmello.dev` → R2 public bucket (package zip downloads)
-- `pasmello.dev` / `api.pasmello.dev` → hosted SaaS (separate repo)
-- `get.pasmello.dev` → CLI install script
+- `registry.pasmello.com` → this repo's API (Hono on Fly.io, Tokyo `nrt`)
+- `market.pasmello.com` → this repo's web UI (SvelteKit static on CF Pages)
+- `cdn.pasmello.com` → R2 public bucket (package zip downloads), fronted by a CF Worker for analytics
+- `get.pasmello.com` → CLI install script (`install.sh`) + release manifest
+- `pasmello.com` / `api.pasmello.com` → hosted SaaS (separate repo)
 
 ## Quick start
 
@@ -49,16 +52,34 @@ make migrate         # run DB migrations
 
 ```
 mello/
-  spec/                     Package envelope schema + vendored Pasmello manifest schemas
+  spec/                     Package envelope schema + vendored Pasmello manifest schemas [Apache 2.0]
   apps/
-    api/                    Registry API (Hono on Fly.io)
-    web/                    Marketplace web UI (SvelteKit → Cloudflare Pages)
+    api/                    Registry API (Hono on Fly.io)                                [AGPL]
+    web/                    Marketplace web UI (SvelteKit → Cloudflare Pages)             [AGPL]
+    cli/                    Rust CLI — `mello publish`, `mello yank`, …                  [Apache 2.0]
   packages/
-    admin-core/             Moderation primitives consumed by apps/web
+    admin-core/             Moderation primitives consumed by apps/web                    [AGPL]
+    plugin-spec/            Envelope + manifest validators, re-exported types            [Apache 2.0]
+    registry-client/        Typed HTTP client consumed by apps/web                        [Apache 2.0]
   infra/
     terraform/              Cloudflare + Fly provisioning
+    workers/cdn-analytics/  CF Worker fronting cdn.pasmello.com (download analytics)
     scripts/                Analytics batch + maintenance scripts
+  docs/                     Publisher Guide, CLI reference, API reference
 ```
+
+## Quick publish walkthrough
+
+```bash
+curl -fsSL https://get.pasmello.com | sh
+mello login
+mello init --type tool --name clock
+# edit mello.package.json + tool.manifest.json + build your entry file
+mello validate
+mello publish
+```
+
+See [docs/publisher-guide.md](./docs/publisher-guide.md) for the full walk-through.
 
 ## Design principles
 
@@ -70,7 +91,7 @@ mello/
 
 ## License
 
-Dual-licensed. See [`LICENSING.md`](./LICENSING.md).
+Per-subtree. See [`LICENSING.md`](./LICENSING.md).
 
-- Core registry + web + admin → AGPL v3 (with commercial dual-license option)
-- Package envelope spec (`spec/`) → Apache 2.0 (so plugin tooling can freely validate)
+- Registry API + web + admin + infra → **AGPL v3** with commercial dual-license option
+- CLI + plugin-spec + registry-client + spec → **Apache 2.0**

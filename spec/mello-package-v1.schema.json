@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://market.pasmello.dev/spec/mello-package-v1.schema.json",
+  "$id": "https://market.pasmello.com/spec/mello-package-v1.schema.json",
   "title": "mello package envelope (v1)",
   "description": "Contents of mello.package.json at the root of every published package zip.",
   "type": "object",

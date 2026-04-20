@@ -22,7 +22,7 @@
     }
   });
 
-  const pasmelloOrigin = () => env.PUBLIC_PASMELLO_ORIGIN ?? 'https://pasmello.dev';
+  const pasmelloOrigin = () => env.PUBLIC_PASMELLO_ORIGIN ?? 'https://pasmello.com';
   const installHref = $derived(version ? pasmelloInstallUrl(pasmelloOrigin(), version.downloadUrl) : '#');
   const isTool = $derived(pkg?.type === 'tool' && version !== null);
 </script>
