@@ -60,6 +60,17 @@ Packs the working directory, computes sha256, and uploads to
 Marks a version unavailable. Coord shape: `<type>:@<scope>/<name>`, e.g.
 `tool:@alice/clock`.
 
+### `mello owners list|add|remove <COORD> [<LOGIN>]`
+
+Manage co-owners. `list` is anonymous; `add` and `remove` require you to be
+the primary owner.
+
+```
+mello owners list   tool:@alice/clock
+mello owners add    tool:@alice/clock bob
+mello owners remove tool:@alice/clock bob
+```
+
 ## `.melloignore`
 
 Works like `.gitignore`. Default excludes: `.git`, `.github`,

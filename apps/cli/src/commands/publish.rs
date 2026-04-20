@@ -20,8 +20,15 @@ pub fn run(cfg: &Config, path: &Path, skip_confirm: bool) -> Result<()> {
     }
 
     println!("Publishing to {}", cfg.registry);
-    println!("  {}: @{}/{}@{}", envelope.r#type, envelope.scope, envelope.name, envelope.version);
-    println!("  size: {} KB  sha256: {}", packed.bytes.len() / 1024, packed.sha256);
+    println!(
+        "  {}: @{}/{}@{}",
+        envelope.r#type, envelope.scope, envelope.name, envelope.version
+    );
+    println!(
+        "  size: {} KB  sha256: {}",
+        packed.bytes.len() / 1024,
+        packed.sha256
+    );
 
     if !skip_confirm {
         print!("Proceed? [y/N] ");

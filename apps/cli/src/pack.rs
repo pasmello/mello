@@ -1,6 +1,6 @@
 use anyhow::{Context, Result};
 use sha2::{Digest, Sha256};
-use std::io::{Cursor, Read, Write};
+use std::io::Cursor;
 use std::path::{Path, PathBuf};
 use walkdir::WalkDir;
 use zip::write::{SimpleFileOptions, ZipWriter};
@@ -13,8 +13,14 @@ pub struct Packed {
 
 /// Default ignore patterns. Supplemented by `.melloignore` globs if present.
 const DEFAULT_IGNORE: &[&str] = &[
-    ".git", ".github", "node_modules", "target", "dist-tmp",
-    ".DS_Store", ".env", ".env.*",
+    ".git",
+    ".github",
+    "node_modules",
+    "target",
+    "dist-tmp",
+    ".DS_Store",
+    ".env",
+    ".env.*",
     "*.log",
 ];
 
@@ -54,8 +60,8 @@ pub fn pack(dir: &Path) -> Result<Packed> {
     let mut entries: Vec<String> = Vec::new();
     {
         let mut writer = ZipWriter::new(&mut buffer);
-        let opts = SimpleFileOptions::default()
-            .compression_method(zip::CompressionMethod::Deflated);
+        let opts =
+            SimpleFileOptions::default().compression_method(zip::CompressionMethod::Deflated);
 
         for entry in WalkDir::new(&root).follow_links(false) {
             let entry = entry?;
@@ -87,62 +93,15 @@ pub fn pack(dir: &Path) -> Result<Packed> {
     }
     let bytes = buffer.into_inner();
     let sha256 = sha256_hex(&bytes);
-    Ok(Packed { bytes, sha256, entries })
+    Ok(Packed {
+        bytes,
+        sha256,
+        entries,
+    })
 }
 
 pub fn sha256_hex(bytes: &[u8]) -> String {
     let mut h = Sha256::new();
     h.update(bytes);
     hex::encode(h.finalize())
-}
-
-/// Re-open a zip and confirm the envelope + nested manifest are present.
-pub fn inspect_packed(bytes: &[u8]) -> Result<PackedInspect> {
-    let reader = Cursor::new(bytes);
-    let mut zip = zip::ZipArchive::new(reader)?;
-    let mut envelope: Option<String> = None;
-    let mut manifest_type: Option<String> = None;
-    let mut manifest_raw: Option<String> = None;
-
-    if let Ok(mut f) = zip.by_name("mello.package.json") {
-        let mut s = String::new();
-        f.read_to_string(&mut s)?;
-        envelope = Some(s);
-    }
-
-    if let Some(env_text) = envelope.as_deref() {
-        #[derive(serde::Deserialize)]
-        struct Shape {
-            r#type: String,
-        }
-        if let Ok(shape) = serde_json::from_str::<Shape>(env_text) {
-            manifest_type = Some(shape.r#type.clone());
-            let filename = format!("{}.manifest.json", shape.r#type);
-            if let Ok(mut f) = zip.by_name(&filename) {
-                let mut s = String::new();
-                f.read_to_string(&mut s)?;
-                manifest_raw = Some(s);
-            }
-        }
-    }
-
-    Ok(PackedInspect {
-        envelope,
-        manifest_type,
-        manifest_raw,
-    })
-}
-
-pub struct PackedInspect {
-    pub envelope: Option<String>,
-    pub manifest_type: Option<String>,
-    pub manifest_raw: Option<String>,
-}
-
-/// Write the packed bytes somewhere, optionally for inspection. Not used by
-/// the publish flow (which streams directly) but handy for `mello pack --out`.
-pub fn write_to(out: &Path, bytes: &[u8]) -> Result<()> {
-    let mut f = std::fs::File::create(out)?;
-    f.write_all(bytes)?;
-    Ok(())
 }

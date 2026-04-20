@@ -1,4 +1,5 @@
 use assert_cmd::Command;
+use predicates::prelude::*;
 use predicates::str::contains;
 
 #[test]
@@ -32,6 +33,7 @@ fn whoami_without_login_fails_clearly() {
         .unwrap()
         .env("MELLO_REGISTRY_URL", "https://invalid.example")
         .env("HOME", std::env::temp_dir())
+        .env("XDG_CONFIG_HOME", std::env::temp_dir())
         .arg("whoami")
         .assert()
         .failure()

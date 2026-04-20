@@ -15,7 +15,10 @@ pub fn run(cfg: &Config) -> Result<()> {
     println!("  {}", start.user_code);
     println!();
     let _ = open::that(&start.verification_uri);
-    println!("Waiting for authorization (expires in {}s)…", start.expires_in);
+    println!(
+        "Waiting for authorization (expires in {}s)…",
+        start.expires_in
+    );
 
     let deadline = Instant::now() + Duration::from_secs(start.expires_in);
     let mut interval = Duration::from_secs(start.interval.max(1));

@@ -6,8 +6,9 @@ pub enum MelloError {
     NotLoggedIn,
 
     #[error("API returned {status}: {code} — {detail}")]
-    Api { status: u16, code: String, detail: String },
-
-    #[error("invalid package: {0}")]
-    InvalidPackage(String),
+    Api {
+        status: u16,
+        code: String,
+        detail: String,
+    },
 }

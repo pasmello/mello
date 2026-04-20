@@ -67,6 +67,34 @@ enum Command {
         #[arg(long)]
         reason: Option<String>,
     },
+    /// Manage co-owners on a package (primary owner only for add/remove).
+    Owners {
+        #[command(subcommand)]
+        action: OwnersAction,
+    },
+}
+
+#[derive(Subcommand, Debug)]
+enum OwnersAction {
+    /// List current owners + co-owners.
+    List {
+        /// Package coordinate: <type>:<scope>/<name>
+        coord: String,
+    },
+    /// Add a co-owner by GitHub login.
+    Add {
+        /// Package coordinate: <type>:<scope>/<name>
+        coord: String,
+        /// GitHub login to grant co-owner role.
+        login: String,
+    },
+    /// Remove a co-owner by GitHub login.
+    Remove {
+        /// Package coordinate: <type>:<scope>/<name>
+        coord: String,
+        /// GitHub login to revoke.
+        login: String,
+    },
 }
 
 fn main() -> Result<()> {
@@ -80,8 +108,15 @@ fn main() -> Result<()> {
         Command::Init { r#type, name } => commands::init::run(&cfg, &r#type, name.as_deref()),
         Command::Validate { path } => commands::validate::run(&cfg, &path),
         Command::Publish { yes, path } => commands::publish::run(&cfg, &path, yes),
-        Command::Yank { coord, version, reason } => {
-            commands::yank::run(&cfg, &coord, &version, reason.as_deref())
-        }
+        Command::Yank {
+            coord,
+            version,
+            reason,
+        } => commands::yank::run(&cfg, &coord, &version, reason.as_deref()),
+        Command::Owners { action } => match action {
+            OwnersAction::List { coord } => commands::owners::list(&cfg, &coord),
+            OwnersAction::Add { coord, login } => commands::owners::add(&cfg, &coord, &login),
+            OwnersAction::Remove { coord, login } => commands::owners::remove(&cfg, &coord, &login),
+        },
     }
 }

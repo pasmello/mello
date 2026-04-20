@@ -9,7 +9,10 @@ const MAX_BYTES: usize = 20 * 1024 * 1024;
 pub fn run(_cfg: &Config, path: &Path) -> Result<()> {
     let envelope = read_envelope(path)?;
     if !matches!(envelope.r#type.as_str(), "tool" | "theme" | "workflow") {
-        anyhow::bail!("envelope.type must be tool | theme | workflow (got {})", envelope.r#type);
+        anyhow::bail!(
+            "envelope.type must be tool | theme | workflow (got {})",
+            envelope.r#type
+        );
     }
     let manifest = read_manifest(path, &envelope.r#type)?;
 
@@ -22,7 +25,10 @@ pub fn run(_cfg: &Config, path: &Path) -> Result<()> {
     }
 
     println!("Package OK:");
-    println!("  {}: @{}/{}@{}", envelope.r#type, envelope.scope, envelope.name, envelope.version);
+    println!(
+        "  {}: @{}/{}@{}",
+        envelope.r#type, envelope.scope, envelope.name, envelope.version
+    );
     println!("  description: {}", envelope.description);
     println!("  license: {}", envelope.license);
     println!("  author: @{}", envelope.author.github);
