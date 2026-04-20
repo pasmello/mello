@@ -1,0 +1,20 @@
+name = "cdn-analytics"
+main = "src/index.ts"
+compatibility_date = "2026-04-01"
+
+# Route cdn.pasmello.com through this worker so we can log every GET before
+# the R2 bucket serves the zip. The zone needs to be proxied on Cloudflare.
+[[routes]]
+pattern = "cdn.pasmello.com/*"
+zone_name = "pasmello.com"
+
+# R2 bucket holding the zips. The worker does not authenticate against the
+# bucket — R2 serves publicly; the worker just logs then forwards.
+[[r2_buckets]]
+binding = "PACKAGES"
+bucket_name = "mello-packages-prod"
+
+# Analytics Engine dataset — one row per download event.
+[[analytics_engine_datasets]]
+binding = "DOWNLOADS"
+dataset = "mello_downloads"
