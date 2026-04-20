@@ -1,8 +1,14 @@
 <script lang="ts">
   import '../lib/styles/tokens.css';
   import '../lib/styles/global.css';
+  import { onMount } from 'svelte';
+  import { auth } from '$lib/auth.ts';
 
   let { children } = $props();
+
+  onMount(() => {
+    void auth.load();
+  });
 </script>
 
 <div class="shell">
@@ -14,7 +20,15 @@
       <a href="/search?type=workflow">Workflows</a>
     </nav>
     <div class="shell-actions">
-      <a href="/dashboard" class="ghost">Dashboard</a>
+      <a href="/publish" class="ghost">Publish</a>
+      {#if auth.status === 'authed' && auth.user}
+        <a href="/dashboard" class="ghost">@{auth.user.login}</a>
+        {#if auth.user.role === 'admin'}
+          <a href="/admin" class="ghost">Admin</a>
+        {/if}
+      {:else if auth.status === 'anon'}
+        <a href="/login" class="ghost">Login</a>
+      {/if}
     </div>
   </header>
   <main class="shell-main">
@@ -23,9 +37,11 @@
   <footer class="shell-footer">
     <span>mello — AGPL v3</span>
     <span>
-      <a href="https://pasmello.dev">pasmello.dev</a>
+      <a href="https://pasmello.com">pasmello.com</a>
       ·
-      <a href="/about">about</a>
+      <a href="/terms">terms</a>
+      ·
+      <a href="/privacy">privacy</a>
     </span>
   </footer>
 </div>
@@ -63,6 +79,8 @@
   }
   .shell-actions {
     margin-left: auto;
+    display: flex;
+    gap: 0.5rem;
   }
   .shell-actions .ghost {
     padding: 0.35rem 0.75rem;
@@ -70,6 +88,9 @@
     border-radius: 6px;
     color: var(--pm-text);
     text-decoration: none;
+  }
+  .shell-actions .ghost:hover {
+    border-color: var(--pm-accent);
   }
   .shell-main {
     flex: 1;

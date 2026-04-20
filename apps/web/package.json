@@ -14,8 +14,14 @@
     "preview": "vite preview",
     "typecheck": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
     "test": "vitest run",
-    "deploy": "wrangler pages deploy build --project-name=market-pasmello-dev",
+    "deploy": "wrangler pages deploy build --project-name=market-pasmello-com",
     "clean": "rm -rf build .svelte-kit"
+  },
+  "dependencies": {
+    "@mello/admin-core": "workspace:*",
+    "@mello/plugin-spec": "workspace:*",
+    "@mello/registry-client": "workspace:*",
+    "jszip": "^3.10.1"
   },
   "devDependencies": {
     "@sveltejs/adapter-static": "^3.0.10",
