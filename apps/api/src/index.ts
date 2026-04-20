@@ -9,6 +9,8 @@ import { publishRoutes } from './routes/publish.ts';
 import { authRoutes } from './routes/auth.ts';
 import { adminRoutes } from './routes/admin.ts';
 import { meRoutes, tokensRoutes } from './routes/me.ts';
+import { yankRoutes } from './routes/yank.ts';
+import { ownersRoutes } from './routes/owners.ts';
 
 const app = new Hono();
 
@@ -28,6 +30,8 @@ app.get('/healthz', (c) => c.json({ ok: true }));
 
 app.route('/auth', authRoutes);
 app.route('/v1/packages', packagesRoutes);
+app.route('/v1/packages', yankRoutes);
+app.route('/v1/packages', ownersRoutes);
 app.route('/v1/publish', publishRoutes);
 app.route('/v1/admin', adminRoutes);
 app.route('/v1/me', meRoutes);
